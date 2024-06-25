@@ -1,0 +1,20 @@
+\section{Appendix}%
+\label{sec:Appendix}
+
+\subsection{Task selection}
+\label{sub:task-selection}
+
+Instead of generating the task with a language model, using one task has the
+following advantages:
+\begin{itemize}
+    \item Easier to implement
+    \item More accurate output verification (see if it is a number)
+\end{itemize}
+
+\paragraph{Generalizability} While a machine generated task will ensure that
+enough of a variety of tasks are tested to cover more use cases, since the
+counting task imply that the model processes the text, it is good enough for me.
+As the TensorTrust paper mentioned, the goal of most language models is to
+process the inputs without shutting down the model.
+
+\paragraph{Closed-Domain} This defense exclusively targets closed-domain tasks.
