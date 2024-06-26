@@ -30,6 +30,7 @@ def parse_args():
 
 # Function to escape text
 def escape_text(text):
+    """Escape text to be saved in a CSV file."""
     text = text.replace('"', '\\"')  # Escape double quotes
     text = text.replace('\n', '\\n')  # Escape newlines
     return text
@@ -73,29 +74,51 @@ def generate_adversarial_test_cases(filepath):
     """Generate adversarial test cases based on the instructions and task."""
     logger.debug(f'generate_adversarial_test_cases: filepath={filepath}')
 
-    cases = list(product(TASKS, [True, False], [True, False]))
+    # Initialize the dataframe
+    cases = list(product(range(len(TASKS)), [True, False], [True, False]))
     instructions = np.array(get_instruction(filepath))
-    tests = np.empty((len(instructions), len(cases)+1), dtype=object)
-    tests[:, 0] = instructions
-    logger.debug(f'test_results: {tests}')
-    for index, case in enumerate(cases):
-        tests[:, index+1] = [get_full_prompt(instr, *case)
-                             for instr in instructions]
+    # +1 for the original instruction ID
+    num_properties = len(cases[0]) + 1
+    num_tests = len(instructions) * len(cases)
+    tests = pd.DataFrame(
+        # +1 for the full prompt
+        np.empty((num_tests, num_properties + 1), dtype=object),
+        columns=['taskId', 'isDefended', 'ignores', 'instrId', 'fullPrompt']
+    )
+
+    # Populate the dataframe
+    index = 0
+    for instrId, instr in enumerate(instructions):
+        for task, isDefended, ignores in cases:
+            fullPrompt = get_full_prompt(instr, TASKS[task], isDefended, ignores)
+            tests.loc[index] = {
+                'taskId': task,
+                'isDefended': isDefended,
+                'ignores': ignores,
+                'instrId': instrId,
+                'fullPrompt': fullPrompt
+            }
+            index += 1
+    logger.debug(
+        f'generate_adversarial_test_cases -- tests generated:\n {tests}')
+
     return tests
 
 
 # Example usage
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG, filename='generate_attacks.log')
+    logging.basicConfig(level=logging.DEBUG, filename='generate_attacks.log',
+                        filemode='w')
     logger.debug("Debugging mode enabled.")
 
     logger.info("Parsing arguments...")
     args = parse_args()
     logger.info("Generating adversarial test cases...")
     tests = generate_adversarial_test_cases(args.instruction_path)
+    logger.debug(f"main -- tests generated:\n {tests}")
 
-    # Escape text and save
     logger.info(f"Saving adversarial test cases to {args.output_path}")
-    for i in range(tests.size):
-        tests.flat[i] = escape_text(tests.flat[i])
-    np.savetxt(args.output_path, tests, fmt='"%s"', delimiter=',')
+    # Escape text for certain formats
+    # for i in range(tests.size):
+    #    tests.flat[i] = escape_text(tests.flat[i])
+    tests.to_pickle(args.output_path)
