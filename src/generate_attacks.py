@@ -22,14 +22,24 @@ def parse_args():
     parser.add_argument(
         'instruction_path', type=str, help='Path to the file containing the instructions.'
     )
+    parser.add_argument(
+        'output_path', type=str, help='Path to the file to save the generated test cases.'
+    )
     return parser.parse_args()
+
+
+# Function to escape text
+def escape_text(text):
+    text = text.replace('"', '\\"')  # Escape double quotes
+    text = text.replace('\n', '\\n')  # Escape newlines
+    return text
 
 
 def get_instruction(filepath):
     """Open the file containing the instructions and return it in an array."""
     with open(filepath, 'r') as file:
         # Read each line and store it in an array
-        instructions_array = file.readlines()
+        instructions_array = np.array(file.readlines())
     logger.info(f'{len(instructions_array)} instructions read from {filepath}')
     return instructions_array
 
@@ -65,13 +75,13 @@ def generate_adversarial_test_cases(filepath):
 
     cases = list(product(TASKS, [True, False], [True, False]))
     instructions = np.array(get_instruction(filepath))
-    test_results = np.empty((len(instructions), len(cases)+1), dtype=object)
-    test_results[:, 0] = instructions
-    logger.debug(f'test_results: {test_results}')
+    tests = np.empty((len(instructions), len(cases)+1), dtype=object)
+    tests[:, 0] = instructions
+    logger.debug(f'test_results: {tests}')
     for index, case in enumerate(cases):
-        test_results[:, index+1] = [get_full_prompt(instr, *case)
-                                    for instr in instructions]
-    return test_results
+        tests[:, index+1] = [get_full_prompt(instr, *case)
+                             for instr in instructions]
+    return tests
 
 
 # Example usage
@@ -82,8 +92,10 @@ if __name__ == "__main__":
     logger.info("Parsing arguments...")
     args = parse_args()
     logger.info("Generating adversarial test cases...")
-    test_cases = generate_adversarial_test_cases(args.instruction_path)
+    tests = generate_adversarial_test_cases(args.instruction_path)
 
-    for test_case in test_cases:
-        print('---')
-        print(test_case)
+    # Escape text and save
+    logger.info(f"Saving adversarial test cases to {args.output_path}")
+    for i in range(tests.size):
+        tests.flat[i] = escape_text(tests.flat[i])
+    np.savetxt(args.output_path, tests, fmt='"%s"', delimiter=',')

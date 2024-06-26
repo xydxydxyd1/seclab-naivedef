@@ -13,4 +13,4 @@ if [[ "$#" -ne 0 ]]; then
     exit 1
 fi
 rm *.log
-python3 generate_attacks.py data/instructions.txt
+python3 generate_attacks.py data/instructions.txt data/attacks.txt
