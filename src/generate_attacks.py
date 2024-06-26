@@ -109,6 +109,7 @@ def generate_adversarial_test_cases(filepath):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG, filename='generate_attacks.log',
                         filemode='w')
+    logger.info("Start running at {datetime.now()}")
     logger.debug("Debugging mode enabled.")
 
     logger.info("Parsing arguments...")
