@@ -1,0 +1,16 @@
+#!/bin/bash
+# run 
+#
+while getopts "" opt; do
+    case $opt in
+	\?)
+	    echo "Invalid option: -$OPTARG" >&2
+	    ;;
+    esac
+done
+if [[ "$#" -ne 0 ]]; then
+    echo "Illegal number of parameters" >&2
+    exit 1
+fi
+rm *.log
+python3 generate_attacks.py data/instructions.txt
