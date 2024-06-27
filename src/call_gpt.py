@@ -28,14 +28,14 @@ def read_tests(tests_path):
     return pd.read_pickle(tests_path)
 
 
-def call_gpt(test):
+def call_gpt(prompt):
     """Call GPT with a given test. Returns the response."""
     #chat_completion = client.chat.completions.create(
     #    model="gpt-3.5-turbo",
-    #    messages=[{"role": "user", "content": test}],
+    #    messages=[{"role": "user", "content": prompt}],
     #)
     #return chat_completion.choices[0].message.content
-    return f"Test run with prompt: {test}"
+    return f"Test run with prompt: {prompt}"
 
 
 def generate_responses(tests):
@@ -54,6 +54,8 @@ def generate_responses(tests):
 
 def run_tests(tests):
     """Run the given tests"""
+    results = pd.DataFrame(columns=["response", "response"])
+    responses = generate_responses(tests)
 
 
 if __name__ == "__main__":
