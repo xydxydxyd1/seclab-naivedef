@@ -22,8 +22,6 @@ def parse_args():
                         help="Path to the tests to be conducted")
     parser.add_argument("instruction_path", type=str,
                         help="Path to the file containing the instructions")
-    parser.add_argument("output_path", type=str,
-                        help="Path to the file to save the results")
     return parser.parse_args()
 
 
@@ -85,8 +83,9 @@ if __name__ == "__main__":
     args = parse_args()
     # Tests dataframe containing all generated prompts and their properties
     all_tests = read_tests(args.tests_path)
-    tests = all_tests[:5]
+    tests = all_tests
     logger.info(f"Running tests subset:\n {tests}")
     responses = generate_responses(tests)
     instructions = get_instructions(args.instruction_path)
     print(responses[0])
+    logger.debug(f"Instructions: {instructions}")

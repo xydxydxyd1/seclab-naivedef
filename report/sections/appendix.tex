@@ -1,27 +1,31 @@
 \section{Appendix}%
 \label{sec:Appendix}
 
-\subsection{Task selection}
-\label{sub:task-selection}
+Mostly notes to myself.
 
-Instead of generating the task with a language model, using one task has the
-following advantages:
-\begin{itemize}
-    \item Easier to implement
-    \item More accurate output verification (see if it is a number)
-\end{itemize}
+\subsection{Improvements}
 
-\paragraph{Generalizability} While a machine generated task will ensure that
+The following improvements can be made to the experiment
+
+\paragraph{Conflict analysis} A thorough analysis of how the model handles
+conflicting instructions with respect to formatting, placement, and wording may
+be insightful.
+
+\paragraph{More defense prompts} More defense prompts with different formatting,
+wording, and placement should be tested.
+
+\paragraph{Sophisticated attacks} Ignore attacks are too simple. More
+sophisticated attacks should be tested.
+
+
+\subsection{Additional Notes}
+
+\paragraph{Sources} This study is inspired by the paper on Instruction
+Hierarhcy. A lot of stuff mentioned is from there.
+
+\paragraph{Machine generated tasks} The two instruction selected may not be
+comprehensive enough. However, while a machine generated task will ensure that
 enough of a variety of tasks are tested to cover more use cases, since the
 counting task imply that the model processes the text, it is good enough for me.
 As the TensorTrust paper mentioned, the goal of most language models is to
-process the inputs without shutting down the model.
-
-\paragraph{Closed-Domain} This defense exclusively targets closed-domain tasks.
-
-
-\subsection{Archive}
-
-This section contains previous iterations of the report. Disregard it. It is
-mostly for record keeping.
-
+process the inputs without shutting down the model. This will not be a focus.

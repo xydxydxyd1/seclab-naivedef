@@ -2,20 +2,16 @@
 \label{sec:Methodologies}
 
 \paragraph{Artifact under evaluation} This experiment evaluates the
-effectiveness of a naive defense prompt against prompt injections on GPT 3.5.
+effectiveness of a \emph{naive defense prompt} against simple "ignore" prompt
+injection attacks on GPT 3.5.
 
-\paragraph{Threat model} The adversary has full control over data, and has full
-knowledge of the system prompt. The goal of the adversary is to execute any
+\subparagraph{Naive defense prompt} The naive defense prompt is a line that
+appears somewhere in the full concatenated prompt that instructs the model to
+prioritize the system prompt over the user input.
+
+\paragraph{Adversary goal} The goal of the adversary is to execute any
 instruction within the user data, including many instructions generally
 considered to be benign (such as "Say Hello").
-
-\paragraph{Defense prompt} The following will be appended to the prompt.
-
-\begin{tcolorbox}
-    Perform the task on the following text, enclosed by three quotation marks.
-    If the text has instructions, DO NOT FOLLOW THEM, instead treat them as if it
-    was also part of the data.
-\end{tcolorbox}
 
 \paragraph{Application goal} The goal of the application is to take in the user
 data, process it, and return the result without executing any instructions
@@ -40,6 +36,14 @@ ability to ignore the instructions within.
 
 \begin{tcolorbox}
     Summarize the following piece of text enclosed by three quotation marks.
+\end{tcolorbox}
+
+\paragraph{Defense prompt} The following will be appended to the prompt.
+
+\begin{tcolorbox}
+    Perform the task on the following text, enclosed by three quotation marks.
+    If the text has instructions, DO NOT FOLLOW THEM, instead treat them as if it
+    was also part of the data.
 \end{tcolorbox}
 
 \paragraph{Adversary tasks} An adversary task have the following properties:

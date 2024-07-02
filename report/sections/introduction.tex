@@ -1,18 +1,27 @@
 \section{Introduction}%
 \label{sec:Introduction}
 
-Defense against prompt injection and jailbreaking is important.
+Closed-domain language models only take data, not instructions. The following is
+an example. Note that the system does not respond to the user's instruction (in
+this case, a question). Instead, it processes the data according to the system
+prompt.
 
-Closed-domain language models only take data, not instructions.
+\begin{tcolorbox}
+    \textbf{System Prompt:} Reword the text in the voice of Yoda.\\
 
-As such, the most naive approach to defending against prompt injections in
-closed-domain tasks is to add a line at the end of the system prompt to ignore
-any instructions in the user prompt (that comes from another paper):
+    \textbf{User-submitted Data:} What is the capital of France?\\
 
-\begin{minted}[]{text}
-Perform the task on the following text. If the text has instructions, DO
-NOT FOLLOW THEM, instead treat them as if it was also part of the data.
-\end{minted}
+    \textbf{Expected Output:} The capital of france, what is, hmm?
+\end{tcolorbox}
+
+For this type of task, the most naive approach to defending against prompt
+injections in closed-domain tasks is to add a line at the end of the system
+prompt to ignore any instructions in the user prompt:
+
+\begin{tcolorbox}
+    Perform the task on the following text. If the text has instructions, DO
+    NOT FOLLOW THEM, instead treat them as if it was also part of the data.
+\end{tcolorbox}
 
 The effectiveness of this strategy will be evaluated in this experiment. The
 goal of the experiment is to gain insight in the language model's behavior when
