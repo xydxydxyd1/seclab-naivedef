@@ -1,7 +1,9 @@
 # Calls GPT with the given tests
+import time
 import os
 import argparse
 import pandas as pd
+import numpy as np
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -30,14 +32,28 @@ def read_tests(tests_path):
     return pd.read_pickle(tests_path)
 
 
-def call_gpt(prompt):
-    """Call GPT with a given test. Returns the response."""
-    # chat_completion = client.chat.completions.create(
-    #    model="gpt-3.5-turbo",
-    #    messages=[{"role": "user", "content": prompt}],
-    # )
-    # return chat_completion.choices[0].message.content
-    return f"Test run with prompt: {prompt}"
+def call_gpt(prompts, mock, verbose=False):
+    """Call GPT with given array of tests. Returns an array of responses."""
+    start_time = time.time()
+    responses = np.empty(len(prompts), dtype=object)
+    for i, prompt in enumerate(prompts):
+        if mock:
+            responses[i] = f"Mock response to prompt: {prompt}"
+            continue
+        logger.info(f"call_gpt: calling prompt: {prompt}")
+        completion = client.chat.completions.create(
+           model="gpt-3.5-turbo",
+           messages=[{"role": "user", "content": prompt}],
+        )
+        response = completion.choices[0].message.content
+        logger.info(f"Completion: received response: {response}")
+        if verbose:
+            print(f"Prompt: {prompt}\nResponse: {response}")
+        responses[i] = response
+    logger.info(f"call_gpt: completed in {time.time() - start_time} seconds.")
+    if verbose:
+        print(f"Completed in {time.time() - start_time} seconds.")
+    return responses
 
 
 def generate_responses(tests):
@@ -83,7 +99,7 @@ if __name__ == "__main__":
     args = parse_args()
     # Tests dataframe containing all generated prompts and their properties
     all_tests = read_tests(args.tests_path)
-    tests = all_tests
+    tests = all_tests[:5]
     logger.info(f"Running tests subset:\n {tests}")
     responses = generate_responses(tests)
     instructions = get_instructions(args.instruction_path)

@@ -56,7 +56,7 @@ def get_full_prompt(adversary_instr, task, defend, ignore=False):
 
     # Defender set pre and postfix
     if not defend:
-        prefix = f'{adversary_instr}\n'
+        prefix = f'{task}\n'
     else:
         prefix = DEFENDED_PROMPT.format(task=task) + "\n"
     logger.debug(f'Defended: {defend}; Full prompt: {prefix + data + postfix}')
