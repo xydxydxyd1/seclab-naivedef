@@ -82,19 +82,19 @@ def generate_adversarial_test_cases(filepath):
     tests = pd.DataFrame(
         # +1 for the full prompt
         np.empty((num_tests, num_properties + 1), dtype=object),
-        columns=['taskId', 'isDefended', 'ignores', 'instrId', 'fullPrompt']
+        columns=['taskId', 'isDefended', 'ignores', 'unmodifiedAdversaryTask', 'fullPrompt']
     )
 
     # Populate the dataframe
     index = 0
-    for instrId, instr in enumerate(instructions):
+    for instr in instructions:
         for task, isDefended, ignores in cases:
             fullPrompt = get_full_prompt(instr, TASKS[task], isDefended, ignores)
             tests.loc[index] = {
                 'taskId': task,
                 'isDefended': isDefended,
                 'ignores': ignores,
-                'instrId': instrId,
+                'unmodifiedAdversaryTask': instr,
                 'fullPrompt': fullPrompt
             }
             index += 1

@@ -1,13 +1,16 @@
 # Main file run
 import prompts
+import numpy as np
 import os
 import pandas as pd
 import logging
 from call_gpt import call_gpt
+from generate_attacks import TASKS
 
 logger = logging.getLogger(__name__)
 DEFAULT_ATTACKS_PATH = "data/attacks.bin"
 DEFAULT_RESPONSES_PATH = "data/responses.bin"
+DEFAULT_EVAL_PATH = "data/evals.bin"
 MOCK = False
 
 
@@ -52,10 +55,10 @@ def run_tests(tests):
         print("Aborting tests")
         exit()
 
-    responses = call_gpt(tests.loc[:,"fullPrompt"], MOCK, verbose=True)
-    tests.insert(2, "response", responses)
+    responses = call_gpt(tests.loc[:, "fullPrompt"], MOCK, verbose=True)
+    tests.insert(len(tests.columns), "response", responses)
     logger.info(f"run_tests: Ran tests:\n{tests}")
-    logger.info(f"run_tests: Responses:\n{tests.loc[:,'response']}")
+    logger.info(f"run_tests: Responses:\n{tests.loc[:, 'response']}")
     return tests
 
 
@@ -73,7 +76,8 @@ def save_responses(tests):
 def get_responses():
     """Entire process of loading or generating responses. Returns pandas
     dataframe of responses"""
-    will_call_gpt = input("1) Load existing responses\n2) Generate new prompts\n> ")
+    will_call_gpt = input(
+        "1) Load existing responses\n2) Generate new prompts\n> ")
 
     if will_call_gpt == "1":
         responsePath = input(
@@ -83,7 +87,7 @@ def get_responses():
         responses = pd.read_pickle(responsePath)
     else:
         tests = load_test_prompts()
-        #tests = tests.head(5)
+        # tests = tests.head(5)
         run_tests(tests)
         save_responses(tests)
         responses = tests
@@ -94,30 +98,76 @@ def get_responses():
 def make_eval_prompts(tests):
     """Entire process of loading evaluations. Returns pandas dataframe of
     evaluations"""
+    tests.insert(len(tests.columns), "systemAlignment", np.empty(len(tests)))
+    tests.insert(len(tests.columns), "adversaryAlignment", np.empty(len(tests)))
+    tests.insert(len(tests.columns), "conflict", np.empty(len(tests)))
+    for i in range(tests.shape[0]):
+        test = tests.iloc[i]
+        tests.loc[i, "systemAlignment"] = prompts.SYSTEM_ALIGNMENT_PROMPT.format(
+            system_task=TASKS[test["taskId"]],
+            unmodified_adversary_task=test["unmodifiedAdversaryTask"],
+            response=test["response"]
+        )
+        tests.loc[i, "adversaryAlignment"] = prompts.ADVERSARY_ALIGNMENT_PROMPT.format(
+            unmodified_adversary_task=test["unmodifiedAdversaryTask"],
+            response=test["response"]
+        )
+        tests.loc[i, "conflict"] = prompts.CONFLICT_DETECTION_PROMPT.format(
+            response=test["response"]
+        )
+    logger.info(f"make_eval_prompts: Made evaluations:\n{
+                tests.loc[:, ['systemAlignment', 'adversaryAlignment', 'conflict']]}")
+    return tests
+
+
+def call_eval_prompts(tests):
+    """Entire process of calling evaluations. Returns pandas dataframe of
+    evaluations"""
+    if MOCK:
+        print("Running evaluations in MOCK mode")
+    else:
+        print("Running evaluations in REAL mode")
+    abort = input(
+        f"Run {len(tests)*3} evaluations on ChatGPT? (y/n) ") != "y"
+    if abort:
+        print("Aborting evaluations")
+        exit()
+
+    responses = call_gpt(tests.loc[:, "systemAlignment"], MOCK, verbose=True)
+    tests.insert(len(tests.columns), "systemAlignmentResponse", responses)
+    responses = call_gpt(tests.loc[:, "adversaryAlignment"], MOCK, verbose=True)
+    tests.insert(len(tests.columns), "adversaryAlignmentResponse", responses)
+    responses = call_gpt(tests.loc[:, "conflict"], MOCK, verbose=True)
+    tests.insert(len(tests.columns), "conflictResponse", responses)
+    logger.info(f"call_eval_prompts: Ran evaluations:\n{tests}")
+    return tests
+
+
+def save_evals(tests):
+    """Entire process of saving evaluations. Returns pandas dataframe of
+    evaluations"""
+    savePath = input(f"Save path for evaluations (default is {DEFAULT_EVAL_PATH}): ")
+    if savePath == "":
+        savePath = DEFAULT_EVAL_PATH
+    tests.to_pickle(savePath)
+    logger.info(f"save_evals: Saved evaluations to {savePath}")
     return tests
 
 
 def get_evals(tests):
     """Entire process of loading or generating evaluations. Returns pandas
     dataframe of evaluations"""
-    will_call_gpt = input("1) Load existing evaluations\n2) Generate new prompts\n> ")
-
-    if will_call_gpt == "1":
-        evalPath = input(
-            f"Enter the path to the evaluations (default is {DEFAULT_RESPONSES_PATH}): ")
-        if evalPath == "":
-            evalPath = DEFAULT_RESPONSES_PATH
-        evals = pd.read_pickle(evalPath)
-    else:
-        evals = make_eval_prompts(tests)
-    logger.info(f"get_evals: Got evaluations:\n{evals}")
-    return evals
+    tests = make_eval_prompts(tests)
+    tests = call_eval_prompts(tests)
+    tests = save_evals(tests)
+    logger.info(f"get_evals: Got evaluations:\n{tests}")
+    return tests
 
 
 if __name__ == "__main__":
     setup()
 
     tests = get_responses()
+    tests = get_evals(tests)
     print(tests)
-    # Evaluate results
     # Visualize and save
