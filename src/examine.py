@@ -1,6 +1,5 @@
-# Examine data frame
 import pandas as pd
+from pandasgui import show
 
-# Load data
 df = pd.read_pickle('data/responses.bin')
-print(df.loc[1, :])
+show(df)
