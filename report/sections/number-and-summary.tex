@@ -1,7 +1,9 @@
-\section{Methodologies}%
-\label{sec:Methodologies}
+\section{Number and summary}%
+\label{sec:Number and summary}
 
-\subsection{First iteration}
+This is the first iteration of the experiments that I conducted, named for the
+two tasks being evaluated.
+
 
 \paragraph{Artifact under evaluation} This experiment evaluates the
 effectiveness of a \emph{naive defense prompt} against simple "ignore" prompt
@@ -57,7 +59,7 @@ ability to ignore the instructions within.
         model into executing the instruction
 \end{itemize}
 
-\subsubsection{Attack generation}
+\subsection{Attack generation}
 
 \paragraph{Naive attacks} Simply put the instruciton in the user data
 
@@ -70,7 +72,7 @@ attack will be the main focus instead of general jailbreaking.
 since ignore should be a decent starting point for a comparison.
 
 
-\subsubsection{Evaluating a response}
+\subsection{Evaluating a response}
 
 \paragraph{Input} The model will generate responses for 4 types of full prompts
 from the combination of the following two properties of the prompt:
@@ -198,13 +200,12 @@ conflict detection.
     conflict between two tasks, 0 otherwise.
 \end{tcolorbox}
 
-\subsubsection{Evaluation of the defense}
+\subsection{Evaluation of the defense}
 
 After every response is evaluated using the above methods, we will see if there
 is a noticeable improvement between defended and undefended prompts.
 
-\subsection{Second iteration}
-
+\subsection{Problems and improvements}
 I qualitatively identified several problems with the first iteration:
 \begin{enumerate}
     \item The alignment rate for undefended cases is very high. This will make a
