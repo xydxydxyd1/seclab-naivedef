@@ -1,6 +1,8 @@
 \section{Methodologies}%
 \label{sec:Methodologies}
 
+\subsection{First iteration}
+
 \paragraph{Artifact under evaluation} This experiment evaluates the
 effectiveness of a \emph{naive defense prompt} against simple "ignore" prompt
 injection attacks on GPT 3.5.
@@ -55,18 +57,20 @@ ability to ignore the instructions within.
         model into executing the instruction
 \end{itemize}
 
-\subsection{Attack generation}
+\subsubsection{Attack generation}
 
 \paragraph{Naive attacks} Simply put the instruciton in the user data
 
 \paragraph{Ignore attacks} Put the instruction in the user data, but also
-instruct it to ignore previous instructions.
+instruct it to ignore previous instructions. Since one priority of this
+experiment is to see how a model reacts to conflicting instructions, the Ignore
+attack will be the main focus instead of general jailbreaking.
 
 \paragraph{More attacks} More advanced attacks such as TAP will be put on hold,
 since ignore should be a decent starting point for a comparison.
 
 
-\subsection{Evaluating a response}
+\subsubsection{Evaluating a response}
 
 \paragraph{Input} The model will generate responses for 4 types of full prompts
 from the combination of the following two properties of the prompt:
@@ -194,8 +198,27 @@ conflict detection.
     conflict between two tasks, 0 otherwise.
 \end{tcolorbox}
 
-\subsection{Evaluation of the defense}
+\subsubsection{Evaluation of the defense}
 
 After every response is evaluated using the above methods, we will see if there
 is a noticeable improvement between defended and undefended prompts.
 
+\subsection{Second iteration}
+
+I qualitatively identified several problems with the first iteration:
+\begin{enumerate}
+    \item The alignment rate for undefended cases is very high. This will make a
+        comparison difficult, since even without a defense the attacks are
+        unsuccessful
+    \item The judgment model is very inaccurate.
+\end{enumerate}
+
+From the above, I will do the following:
+
+\paragraph{Investigate success} Since there is a high success rate, I will tune
+it qualitatively to investigate potential causes of success. Then, I will
+quantitatively record the difference.
+
+\paragraph{Focus on word counting} Since word counting is the easier task to
+evaluate, I will temporarily sidestep the issue of the judgment model's
+inaccuracy by focusing on word counting.

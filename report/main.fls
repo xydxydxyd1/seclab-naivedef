@@ -329,10 +329,10 @@ INPUT ./sections/methodologies.tex
 INPUT ./sections/methodologies.tex
 INPUT ./sections/methodologies.tex
 INPUT sections/methodologies.tex
-INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
-INPUT /usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm
-INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
 INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
+INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+INPUT /usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm
 INPUT /usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 INPUT ./sections/appendix.tex
 INPUT ./sections/appendix.tex
