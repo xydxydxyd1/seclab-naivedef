@@ -1,0 +1,25 @@
+\section{Priority search}%
+\label{sec:Priority search}
+
+At this stage, I want to examine why the success rate is so high when there is
+no explicit training on which instructions to prioritize.
+
+\subsection{Hypotheses}
+
+Here is a list of things I think may impact the priority of different
+instructions:
+
+\begin{itemize}
+    \item \textbf{Model} --- Different models are trained differently.
+    \item \textbf{Position} --- The relative position of the two instructions in
+        the full prompt intuitively holds significance.
+    \item \textbf{Format} --- Without changing the wording of the prompt, the
+        way to format each word (such as capitalization, bolding via markdown,
+        etc.) may impact priority.
+    \item \textbf{Wording} --- Without changing the structure of the prompt,
+        the way to word each instruction, including the use of keywords like
+        "important", punctuation, etc. may impact priority.
+\end{itemize}
+
+Model and position are relatively simple. Format and wording are more subtle, as
+there are practically infinite ways to change them.
