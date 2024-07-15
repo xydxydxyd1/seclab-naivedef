@@ -2,7 +2,10 @@
 \label{sec:Priority search}
 
 At this stage, I want to examine why the success rate is so high when there is
-no explicit training on which instructions to prioritize.
+no explicit training on which instructions to prioritize. The question is:
+keeping jailbreak prevention in mind, when there are two conflicting
+instructions, which one does the model prioritize?
+
 
 \subsection{Hypotheses}
 
@@ -19,7 +22,27 @@ instructions:
     \item \textbf{Wording} --- Without changing the structure of the prompt,
         the way to word each instruction, including the use of keywords like
         "important", punctuation, etc. may impact priority.
+    \item \textbf{Ignore} --- Each instruction may actively refer to the other
+        instruction to tell the model to ignore it.
 \end{itemize}
 
 Model and position are relatively simple. Format and wording are more subtle, as
-there are practically infinite ways to change them.
+there are practically infinite ways to change them. Ignore is a special case and
+arguably the most difficult, since there are many ways to write not only the
+ignore clause but also the reference to the other instruction. One can use
+simple words like "the above instruction", or more complex ones such as "the
+instruction surrounded by three colons".
+
+\paragraph{Model} Since I only have access to GPT-3.5, I will not focus on this.
+
+\paragraph{Position} With two conflicting instructions, there are only 
+
+
+\subsection{Code}
+
+First
+
+
+\paragraph{Ignore} The problem is, the conflicting instruction actively tells to
+ignore the other one. As such, this is not a simple priority problem where you
+put two instructions next to each other; they are related.
