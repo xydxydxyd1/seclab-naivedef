@@ -39,7 +39,7 @@ def load_test_prompts():
             "python3 generate_attacks.py data/instructions.txt data/attacks.bin")
         attackBinPath = DEFAULT_ATTACKS_PATH
     tests = pd.read_pickle(attackBinPath)
-    tests = tests.head(10)
+    tests = tests.head(100)
     logger.info(f"load_tests: Loaded test cases:\n{tests}")
     return tests
 

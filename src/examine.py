@@ -2,6 +2,5 @@
 import pandas as pd
 
 # Load data
-df = pd.read_pickle('data/evals.bin')
-print(df.loc[1, "adversaryAlignment"])
-print(df.loc[1, "adversaryAlignmentResponse"])
+df = pd.read_pickle('data/responses.bin')
+print(df.loc[1, :])
