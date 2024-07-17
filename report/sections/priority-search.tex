@@ -9,13 +9,17 @@ instructions, which one does the model prioritize?
 
 \subsection{Hypotheses}
 
-Here is a list of things I think may impact the priority of different
-instructions:
+To do this, we need to know \emph{what factors affect the priority of
+instructions} and \emph{how}. The problem is, it is likely impossible to come up
+with a completely comprehensive list of factors. To cover as much ground as
+possible, we will use a layered approach, with each layer modifying the
+instruction on a different level.
 
 \begin{itemize}
     \item \textbf{Model} --- Different models are trained differently.
-    \item \textbf{Position} --- The relative position of the two instructions in
-        the full prompt intuitively holds significance.
+    \item \textbf{Position} --- Without modifying any of the words, The relative
+        position of the two instructions in the full prompt intuitively holds
+        significance.
     \item \textbf{Format} --- Without changing the wording of the prompt, the
         way to format each word (such as capitalization, bolding via markdown,
         etc.) may impact priority.
@@ -32,11 +36,6 @@ arguably the most difficult, since there are many ways to write not only the
 ignore clause but also the reference to the other instruction. One can use
 simple words like "the above instruction", or more complex ones such as "the
 instruction surrounded by three quotes".
-
-\paragraph{Model} Since I only have access to GPT-3.5, I will not focus on this.
-
-\paragraph{Position} With two conflicting instructions, there are only 
-
 
 \subsection{Code}
 
