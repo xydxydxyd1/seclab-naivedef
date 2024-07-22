@@ -27,4 +27,5 @@ if __name__ == "__main__":
     args = parse_args()
     output_path = args.output_path
     generator = GENERATOR_DICT[args.type]
-    print(generator())
+    for testcase in generator():
+        print(testcase)

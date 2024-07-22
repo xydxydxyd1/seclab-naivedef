@@ -10,10 +10,13 @@ OTHER_OPTS = ['next', 'previous']
 random.seed(RAND_SEED)
 
 
-def gen_testcase():
-    rand_num = random.randint(0, 1000)
-    prefix = POSITION_TEMPLATE.format(random_number=rand_num, other=OTHER_OPTS[0])
-    rand_num = random.randint(0, 1000)
-    suffix = POSITION_TEMPLATE.format(random_number=rand_num, other=OTHER_OPTS[1])
-    full_prompt = prefix + '\n' + suffix
-    return TestCase(full_prompt, prefix, suffix, rand_num, rand_num)
+def gen_testcase(num_tests=100):
+    testcases = []
+    for _ in range(num_tests):
+        rand_num = random.randint(0, 1000)
+        prefix = POSITION_TEMPLATE.format(random_number=rand_num, other=OTHER_OPTS[0])
+        rand_num = random.randint(0, 1000)
+        suffix = POSITION_TEMPLATE.format(random_number=rand_num, other=OTHER_OPTS[1])
+        full_prompt = prefix + '\n' + suffix
+        testcases.append(TestCase(full_prompt, prefix, suffix, rand_num, rand_num))
+    return testcases
