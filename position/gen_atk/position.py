@@ -13,6 +13,7 @@ random.seed(RAND_SEED)
 def gen_testcase():
     rand_num = random.randint(0, 1000)
     prefix = POSITION_TEMPLATE.format(random_number=rand_num, other=OTHER_OPTS[0])
+    rand_num = random.randint(0, 1000)
     suffix = POSITION_TEMPLATE.format(random_number=rand_num, other=OTHER_OPTS[1])
     full_prompt = prefix + '\n' + suffix
     return TestCase(full_prompt, prefix, suffix, rand_num, rand_num)
