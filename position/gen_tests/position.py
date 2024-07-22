@@ -1,5 +1,4 @@
 # Tests whether relative position matters in priority, including haystack
-from testcase import TestCase
 import pandas as pd
 import numpy as np
 import random

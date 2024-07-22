@@ -31,3 +31,4 @@ if __name__ == "__main__":
     generator = GENERATOR_DICT[args.type]
     testcases = generator()
     print(testcases)
+    testcases.to_pickle(output_path)
