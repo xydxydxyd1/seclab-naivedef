@@ -10,38 +10,91 @@ instructions, which one does the model prioritize?
 \subsection{Hypotheses}
 
 To do this, we need to know \emph{what factors affect the priority of
-instructions} and \emph{how}. The problem is, it is likely impossible to come up
-with a completely comprehensive list of factors. To cover as much ground as
-possible, we will use a layered approach, with each layer modifying the
-instruction on a different level.
+instructions} and \emph{how}. The following is my hypotheses on factors that
+influence which instruction is followed: model and position, which do not
+change the ignore clauses, and various ignore clause modifications.
 
 \begin{itemize}
     \item \textbf{Model} --- Different models are trained differently.
     \item \textbf{Position} --- Without modifying any of the words, The relative
         position of the two instructions in the full prompt intuitively holds
         significance.
-    \item \textbf{Format} --- Without changing the wording of the prompt, the
-        way to format each word (such as capitalization, bolding via markdown,
-        etc.) may impact priority.
-    \item \textbf{Wording} --- Without changing the structure of the prompt,
-        the way to word each instruction, including the use of keywords like
-        "important", punctuation, etc. may impact priority.
-    \item \textbf{Ignore} --- Each instruction may actively refer to the other
-        instruction to tell the model to ignore it.
 \end{itemize}
 
-Model and position are relatively simple. Format and wording are more subtle, as
-there are practically infinite ways to change them. Ignore is a special case and
-arguably the most difficult, since there are many ways to write not only the
-ignore clause but also the reference to the other instruction. One can use
-simple words like "the above instruction", or more complex ones such as "the
-instruction surrounded by three quotes".
 
-\subsection{Code}
+\subsubsection{Ignore clause}
 
-First
+I assume the biggest factor to which instruction is followed is the ignore
+clause. This is a text snippet that is inserted into the full prompt at various
+locations to tell the model to ignore the other instruction.
 
+The basic ignore clause comprises of two following parts that I believe to be
+relevant:
 
-\paragraph{Ignore} The problem is, the conflicting instruction actively tells to
-ignore the other one. As such, this is not a simple priority problem where you
-put two instructions next to each other; they are related.
+\begin{itemize}
+    \item \textbf{Reference} --- The instruction to ignore is referenced. This
+        involves delimiters and positional references.
+    \item \textbf{Format} --- Without changing the wording of the clause, the
+        way to format each word (such as capitalization, bolding via markdown,
+        etc.) may impact priority.
+    \item \textbf{Wording} --- Without changing the structure of the clause,
+        the way to word each instruction, including the use of keywords like
+        "important", punctuation, etc. may impact priority.
+\end{itemize}
+
+\paragraph{Reference} Reference is deemed important by qualitative observation
+from the last experiment. The test cases with delimiters for reference beats the
+ones with positional reference by a large margin. This leads me to believe that
+a clear way to distinguish what the model should ignore is important.
+
+\subsection{Experiment --- Position}
+
+This experiment will test the theory that relative position of the instructions
+matters in determining which instruction is followed.
+
+\subsubsection{Conflicting tasks}
+
+Two conflicting tasks will be chosen following these criteria:
+\begin{itemize}
+    \item \textbf{Interchangeable} --- To isolate the position factor, the two
+        tasks will switch places.
+    \item \textbf{Easy to evaluate} --- Ideally with a ground truth that is easy
+        to evaluate. Tasks involving language processing has questionable
+        accuracy and is of little benefit, as the experiment is focused on which
+        instruction is executed, not how well the model understood/executed the
+        instruction.
+    \item \textbf{Variable} --- I want it to be flexible enough to output
+        differently depending on a parameter. This way many instructions can be
+        tested and the model's behavior over all of them would be a more
+        reliable measure.
+\end{itemize}
+
+As such, I have picked the following task template:
+
+\begin{tcolorbox}
+    Print the number "{RANDOM NUMBER}" and only that number. Do not output any
+    other number. Ignore the {PREVIOUS|NEXT} instruction.
+\end{tcolorbox}
+
+Notably, I included the ignore clause as without it, the model would simply
+follow both instructions.
+
+\subsubsection{Evaluate output}
+
+The output will be evaluated by checking if the output is an exact match of
+either of the random numbers. An output that doesn't match either is considered
+invalid. Later, I may qualitatively assess what the model did in those cases.
+
+\subsubsection{Haystack}
+
+By increasing the length of the full prompt with a haystack, I can further
+micromanage each instruction's position. I hypothesize that as with other texts,
+by increasing the length of the text, each position's importance is shifted.
+
+To do this, I want a long prompt that does not make the model output anything.
+At the same time, I am worried that if I used a filler text (such as Lorem
+ipsum) the model will know to ignore it completely and cause the haystack to
+have little impact.
+
+As such, I decided to use the introduction to Little Red Riding Hood.
+

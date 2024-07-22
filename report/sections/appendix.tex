@@ -29,3 +29,42 @@ enough of a variety of tasks are tested to cover more use cases, since the
 counting task imply that the model processes the text, it is good enough for me.
 As the TensorTrust paper mentioned, the goal of most language models is to
 process the inputs without shutting down the model. This will not be a focus.
+
+\subsection{Archive}
+
+\emph{This section contains misc. text snippets from previous renditions saved
+in case they are needed later.}
+
+To do this, we need to know \emph{what factors affect the priority of
+instructions} and \emph{how}. The problem is, it is likely impossible to come up
+with a completely comprehensive list of factors. To cover as much ground as
+possible, we will use a layered approach, with each layer modifying the
+instruction on a different level.
+
+\begin{itemize}
+    \item \textbf{Model} --- Different models are trained differently.
+    \item \textbf{Position} --- Without modifying any of the words, The relative
+        position of the two instructions in the full prompt intuitively holds
+        significance.
+    \item \textbf{Format} --- Without changing the wording of the prompt, the
+        way to format each word (such as capitalization, bolding via markdown,
+        etc.) may impact priority.
+    \item \textbf{Wording} --- Without changing the structure of the prompt,
+        the way to word each instruction, including the use of keywords like
+        "important", punctuation, etc. may impact priority.
+    \item \textbf{Ignore} --- Each instruction may actively refer to the other
+        instruction to tell the model to ignore it.
+\end{itemize}
+
+Model and position are relatively simple. Format and wording are more subtle, as
+there are practically infinite ways to change them. Ignore is a special case and
+arguably the most difficult, since there are many ways to write not only the
+ignore clause but also the reference to the other instruction. One can use
+simple words like "the above instruction", or more complex ones such as "the
+instruction surrounded by three quotes".
+
+\subsection{Ignore}
+
+\emph{Ignore} adds clauses to each instruction to tell the model to ignore the
+other instruction. This differs from the other methods because it is the only
+one that acknowledges the other instruction's existence.
