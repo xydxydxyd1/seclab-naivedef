@@ -16,8 +16,6 @@ that outputs a dataframe with the following columns:
 The test dataframe will then be pickled and saved according to arguments
 provided to `main.py`
 
-# Evaluation
+# Judge
 
-Evaluation code is then run on the pickled test case dataframe. In this step,
-the responses will be generated and matched. Then, visualizations will be
-created.
+The pickled test cases will then be tested and judged.
