@@ -1,4 +1,5 @@
 import argparse
+import logging
 
 # Import generation methods
 from position import gen_testcase as gen_test_pos
@@ -24,8 +25,9 @@ def parse_args():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG, filename='main.log', filemode='w')
     args = parse_args()
     output_path = args.output_path
     generator = GENERATOR_DICT[args.type]
-    for testcase in generator():
-        print(testcase)
+    testcases = generator()
+    print(testcases)
