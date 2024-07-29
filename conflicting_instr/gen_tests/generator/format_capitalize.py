@@ -37,7 +37,7 @@ def gen_testcase(num_tests=100):
         instrs[upper_instr] = instrs[upper_instr].upper()
         lower_instr = 0 if upper_instr == 1 else 1
 
-        output = []
+        output = [0, 0]
 
         # Construct prefix
         output[PREFIX] = random.randint(0, 1000)

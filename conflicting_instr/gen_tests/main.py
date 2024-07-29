@@ -1,11 +1,13 @@
 import argparse
 import logging
 
-# Import generation methods
+# Import test generators methods
 from generator.position import gen_testcase as gen_test_pos
+from generator.format_capitalize import gen_testcase as gen_test_fmt_cap
 
 GENERATOR_DICT = {
-    'position': gen_test_pos
+    'position': gen_test_pos,
+    'format_capitalize': gen_test_fmt_cap
 }
 
 
@@ -20,7 +22,7 @@ def parse_args():
     )
     parser.add_argument(
         '--type', type=str, help='Which type of test case to generate',
-        choices=GENERATOR_DICT.keys(), default='position'
+        choices=GENERATOR_DICT.keys(), default='format_capitalize'
     )
     return parser.parse_args()
 
