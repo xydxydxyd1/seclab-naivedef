@@ -2,7 +2,7 @@ import argparse
 import logging
 
 # Import generation methods
-from position import gen_testcase as gen_test_pos
+from generator.position import gen_testcase as gen_test_pos
 
 GENERATOR_DICT = {
     'position': gen_test_pos
