@@ -15,11 +15,12 @@ def parse_args():
         description='Generate test cases for conflicting isntructions experiment'
     )
     parser.add_argument(
-        'output_path', type=str, help='Path to the file to save the generated test cases.'
+        '--output_path', type=str, help='Path to the file to save the generated test cases.',
+        default='../data/gen_tests.pkl'
     )
     parser.add_argument(
-        'type', type=str, help='Which type of test case to generate',
-        choices=GENERATOR_DICT.keys()
+        '--type', type=str, help='Which type of test case to generate',
+        choices=GENERATOR_DICT.keys(), default='position'
     )
     return parser.parse_args()
 
@@ -30,5 +31,7 @@ if __name__ == "__main__":
     output_path = args.output_path
     generator = GENERATOR_DICT[args.type]
     testcases = generator()
+
     print(testcases)
+    print(f"Saving test cases to {output_path}")
     testcases.to_pickle(output_path)

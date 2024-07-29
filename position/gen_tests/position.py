@@ -25,9 +25,14 @@ def gen_testcase(num_tests=100):
         prefix_num = random.randint(0, 1000)
         prefix = POSITION_TEMPLATE.format(
             random_number=prefix_num, other=OTHER_OPTS[0])
+
         suffix_num = random.randint(0, 1000)
+        # Ensure that the numbers in each is different
+        while suffix_num == prefix_num:
+            suffix_num = random.randint(0, 1000)
         suffix = POSITION_TEMPLATE.format(
             random_number=suffix_num, other=OTHER_OPTS[1])
+
         full_prompt = prefix + '\n' + suffix
 
         testcases.loc[i, 'full_prompt'] = full_prompt
