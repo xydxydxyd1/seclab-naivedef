@@ -17,7 +17,8 @@ def call_gpt(prompts, mock, verbose=False):
     responses = np.empty(len(prompts), dtype=object)
     for i, prompt in enumerate(prompts):
         if mock:
-            responses[i] = f"Mock response to prompt: {prompt}"
+            #responses[i] = f"Mock response to prompt: {prompt}"
+            responses[i] = "114"
             continue
         logger.info(f"call_gpt: calling prompt: {prompt}")
         completion = client.chat.completions.create(
