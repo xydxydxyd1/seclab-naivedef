@@ -32,17 +32,17 @@ def gen_testcase(num_tests=100):
         instrs = ['', '']
         instrs[PREFIX] = IGNORE_TEMPLATE.format(other=OTHER_OPTS[PREFIX])
         instrs[SUFFIX] = IGNORE_TEMPLATE.format(other=OTHER_OPTS[SUFFIX])
-        # Randomize whether prefix or suffix is capitalized
-        upper_instr = random.randint(0, 1)
+        # First half has prefix capitalized, second half has suffix capitalized
+        upper_instr = PREFIX if i < num_tests / 2 else SUFFIX
+        lower_instr = PREFIX if upper_instr == SUFFIX else SUFFIX
         instrs[upper_instr] = instrs[upper_instr].upper()
-        lower_instr = 0 if upper_instr == 1 else 1
 
         output = [0, 0]
 
         # Construct prefix
         output[PREFIX] = random.randint(0, 1000)
         task = TASK_TEMPLATE.format(random_number=output[PREFIX])
-        instrs[PREFIX] = task + instrs[PREFIX]
+        instrs[PREFIX] = task + " " + instrs[PREFIX]
 
         # Construct suffix
         output[SUFFIX] = random.randint(0, 1000)
@@ -50,7 +50,7 @@ def gen_testcase(num_tests=100):
         while output[SUFFIX] == output[PREFIX]:
             output[SUFFIX] = random.randint(0, 1000)
         task = TASK_TEMPLATE.format(random_number=output[SUFFIX])
-        instrs[SUFFIX] = task + instrs[SUFFIX]
+        instrs[SUFFIX] = task + " " + instrs[SUFFIX]
 
         full_prompt = instrs[PREFIX] + '\n' + instrs[SUFFIX]
 

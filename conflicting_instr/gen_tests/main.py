@@ -24,6 +24,9 @@ def parse_args():
         '--type', type=str, help='Which type of test case to generate',
         choices=GENERATOR_DICT.keys(), default='format_capitalize'
     )
+    parser.add_argument(
+        '--num_tests', type=int, help='The number of tests to run', default=100
+    )
     return parser.parse_args()
 
 
@@ -32,7 +35,7 @@ if __name__ == "__main__":
     args = parse_args()
     output_path = args.output_path
     generator = GENERATOR_DICT[args.type]
-    testcases = generator()
+    testcases = generator(args.num_tests)
 
     print(testcases)
     print(f"Saving test cases to {output_path}")
