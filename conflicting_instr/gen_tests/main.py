@@ -1,14 +1,7 @@
 import argparse
 import logging
 
-# Import test generators methods
-from generator.position import gen_testcase as gen_test_pos
-from generator.format_capitalize import gen_testcase as gen_test_fmt_cap
-
-GENERATOR_DICT = {
-    'position': gen_test_pos,
-    'format_capitalize': gen_test_fmt_cap
-}
+from generator.get_test import get_test, test_choices
 
 
 def parse_args():
@@ -22,7 +15,7 @@ def parse_args():
     )
     parser.add_argument(
         '--type', type=str, help='Which type of test case to generate',
-        choices=GENERATOR_DICT.keys(), default='format_capitalize'
+        choices=test_choices, default='position'
     )
     parser.add_argument(
         '--num_tests', type=int, help='The number of tests to run', default=100
@@ -34,9 +27,11 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG, filename='main.log', filemode='w')
     args = parse_args()
     output_path = args.output_path
-    generator = GENERATOR_DICT[args.type]
-    testcases = generator(args.num_tests)
+    test = get_test(args.type)()
 
-    print(testcases)
+    test.gen_tests(args.num_tests);
+    test_df = test.tests()
+
+    print(test_df)
     print(f"Saving test cases to {output_path}")
-    testcases.to_pickle(output_path)
+    test_df.to_pickle(output_path)
