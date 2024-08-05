@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 RAND_SEED = 42
 # Same for both instructions with different number
 TASK_TEMPLATE = 'Print the number "{random_number}" and only that number. Do not output any other number.'
-# Will be capitalized
 IGNORE_TEMPLATE = 'Ignore the {other} instruction.'
+IGNORE_TEMPLATE_UPPER = 'IgnORE THe {other} iNStruCtION.'
 OTHER_OPTS = ['next', 'previous']
 
 PREFIX = 0
@@ -28,14 +28,17 @@ def gen_testcase(num_tests=100):
                                                                 'output_2'],
                              dtype=str)
     for i in range(num_tests):
-        # Set ignore phrases
-        instrs = ['', '']
-        instrs[PREFIX] = IGNORE_TEMPLATE.format(other=OTHER_OPTS[PREFIX])
-        instrs[SUFFIX] = IGNORE_TEMPLATE.format(other=OTHER_OPTS[SUFFIX])
+        # Determine whether PREFIX or SUFFIX is capitalized.
         # First half has prefix capitalized, second half has suffix capitalized
         upper_instr = PREFIX if i < num_tests / 2 else SUFFIX
         lower_instr = PREFIX if upper_instr == SUFFIX else SUFFIX
-        instrs[upper_instr] = instrs[upper_instr].upper()
+
+        # Set ignore phrases
+        instrs = ['', '']
+        instrs[lower_instr] = IGNORE_TEMPLATE.format(
+            other=OTHER_OPTS[lower_instr])
+        instrs[upper_instr] = IGNORE_TEMPLATE_UPPER.format(
+            other=OTHER_OPTS[upper_instr])
 
         output = [0, 0]
 
