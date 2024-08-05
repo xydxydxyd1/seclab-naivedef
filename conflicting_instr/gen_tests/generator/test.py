@@ -8,7 +8,7 @@ class Test(ABC):
 
     @property
     @abstractmethod
-    def seed(self):
+    def seed(self) -> int:
         """The seed used to generate the random test cases"""
         pass
 
