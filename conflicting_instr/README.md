@@ -1,3 +1,7 @@
+# To-do
+
+* `format_capitalize`: add control
+
 # Conflicting Instructions
 
 This folder contains the code for examining the following factors relating to
