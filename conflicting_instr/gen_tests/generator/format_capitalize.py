@@ -1,3 +1,4 @@
+# TODO: Currently broken, need to change to Test object <05-08-24, Eric Xu> #
 # Generate cases for comparison between lower case and upper case instructions
 import pandas as pd
 import numpy as np
