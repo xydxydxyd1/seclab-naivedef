@@ -1,9 +1,11 @@
 # Factory for Tests
 
 from generator.position import PositionTest
+from generator.position_filler import PositionFillerTest
 
 test_dict = {
     'position': PositionTest,
+    'position_filler': PositionFillerTest,
     'format_capitalize': None
 }
 
