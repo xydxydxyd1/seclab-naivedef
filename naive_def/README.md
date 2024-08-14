@@ -1,4 +1,4 @@
-# Naive Defense
+# ARCHIVED! Naive Defense
 
 This folder contains code for testing naive defense, where the number generation
 task and the summarization task is used to test the effect of the ignore prompt.
