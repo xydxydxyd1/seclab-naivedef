@@ -1,4 +1,5 @@
 The `naive_def` directory is experimenting with naive ignore defense's effect.
+It is archived.
 
 The `conflicting_instr` directory is experimenting with different factors that
 make an instruction more important than another in the same prompt.
